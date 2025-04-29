@@ -6,7 +6,7 @@ I will be skipping the first four tasks as they are already guided.
 ### Task 5 (Custom Wordlist Generation):
 At this point you should have wordlistctl set up. We will need it for the rest of the challenge. 
 
-Unfortunately [Mentalist](https://github.com/sc0tfree/mentalist) is a bit outdated, which comes with some issues if using a newer version of python. There's two ways to solve this. I'm going to be explaining the 'proper' way using pyenv. Otherwise you can modify the code manually as discussed in this [issue](https://github.com/sc0tfree/mentalist/issues/41) or look for a working fork.
+Unfortunately [Mentalist](https://github.com/sc0tfree/Mentalist) is a bit outdated, which comes with some issues if using a newer version of python. There's two ways to solve this. I'm going to be explaining the 'proper' way using pyenv. Otherwise you can modify the code manually as discussed in this [issue](https://github.com/sc0tfree/Mentalist/issues/41) or look for a working fork.
 
 #### pyenv method 
 This is going to be a quick overview of how to use [pyenv](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv), its installation and use may differ slightly depending on which shell you're using. I recommend following the full instructions on the github page.
@@ -17,17 +17,17 @@ curl -fsSL https://pyenv.run | bash
 ```
 * Set up shell enviroment for Pyenv (follow instructions on github for your corresponding shell, most likely bash)
 
-* Create a directory for mentalist enviroment
+* Create a directory for Mentalist enviroment
 ```
-mkdir mentalist-env
+mkdir Mentalist-env
 ```
-* Clone mentalist
+* Clone Mentalist
 ```
-git clone https://github.com/sc0tfree/mentalist
+git clone https://github.com/sc0tfree/Mentalist
 ```
-* Move into the mentalist directory
+* Move into the Mentalist directory
 ```
-cd mentalist
+cd Mentalist
 ```
 * Install correct python version using pyenv
 ```
@@ -46,16 +46,16 @@ python --version
 Python 3.11.8
 ```
 If you move into a different directory and check version again, it should be your global version, not 3.11.8. 
-* Install mentalist (make sure you're in the right directory if you changed to test pyenv)
+* Install Mentalist (make sure you're in the right directory if you changed to test pyenv)
 ```
 pip install .
 ```
 If you did everything correctly it should say 'Successfuly installed Mentalist-1.0'.
-* Run mentalist
+* Run Mentalist (I used sudo because I was getting permission errors when trying to save the wordlist)
 ```
-mentalist
+sudo Mentalist
 ```
-You should see the mentalist GUI open. While that was slightly annoying, it's important to understand how to run things that rely on deprecated versions of python.
+You should see the Mentalist GUI open. While that was slightly annoying, it's important to understand how to run things that rely on deprecated versions of python.
 
 Now we can move on to actually crafting the wordlist.
 
@@ -69,7 +69,11 @@ This will download a few folders in your /usr/share/wordlists directory. We are 
 ```
 gunzip dogs.txt.gz
 ```
-* Now open mentalist
+* Now open Mentalist
 * Remove the preloaded English dictionary wordlist, add the dog wordlist.
 * Press the plus in the top right, select Case, then click the plus next to Case. Select `Toggle Nth...` and then enter 2.
 * Press the plus in the top right, select Substitution, then click the plus next to Substitution. Select `Replace All Instances...` and then select `S -> $`
+
+![mentalist_wordlist](https://github.com/user-attachments/assets/659fb317-4531-40f3-832f-634a397f5a3f)
+It should look like this.
+* Click Process, select Full Wordlist, give the new wordlist a name and save it.
