@@ -74,6 +74,9 @@ gunzip dogs.txt.gz
 * Press the plus in the top right, select Case, then click the plus next to Case. Select `Toggle Nth...` and then enter 2.
 * Press the plus in the top right, select Substitution, then click the plus next to Substitution. Select `Replace All Instances...` and then select `S -> $`
 
-![mentalist_wordlist](https://github.com/user-attachments/assets/659fb317-4531-40f3-832f-634a397f5a3f)
-It should look like this.
+| ![mentalist_wordlist](https://github.com/user-attachments/assets/659fb317-4531-40f3-832f-634a397f5a3f) |
+|:--:| 
+| *It should look like this.* |
+
+
 * Click Process, select Full Wordlist, give the new wordlist a name and save it.
