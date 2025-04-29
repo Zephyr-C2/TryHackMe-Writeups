@@ -58,3 +58,18 @@ mentalist
 You should see the mentalist GUI open. While that was slightly annoying, it's important to understand how to run things that rely on deprecated versions of python.
 
 Now we can move on to actually crafting the wordlist.
+
+#### Crafting dog wordlist 
+* First fetch (haha) the dog wordlist using wordlistctl. I did this by navigating to where I had the script installed and running:
+```
+sudo ./wordlistctl.py fetch dogs
+```
+This will download a few folders in your /usr/share/wordlists directory. We are looking for the /usr/share/wordlists/misc/dogs.txt.gz
+* Unzip it
+```
+gunzip dogs.txt.gz
+```
+* Now open mentalist
+* Remove the preloaded English dictionary wordlist, add the dog wordlist.
+* Press the plus in the top right, select Case, then click the plus next to Case. Select `Toggle Nth...` and then enter 2.
+* Press the plus in the top right, select Substitution, then click the plus next to Substitution. Select `Replace All Instances...` and then select `S -> $`
