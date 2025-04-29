@@ -80,3 +80,16 @@ gunzip dogs.txt.gz
 
 
 * Click Process, select Full Wordlist, give the new wordlist a name and save it.
+
+##### Using the dog wordlist with JohnTheRipper
+* Make a file with the given hash
+```
+echo "ed91365105bba79fdab20c376d83d752" > md5.txt
+```
+* Run JohnTheRipper with the crafted wordlist
+```
+john --format=raw-MD5 --wordlist=/usr/share/wordlists/misc/mentalist_dog_list.txt md5.txt
+```
+| ![dog_answer](https://github.com/user-attachments/assets/613654cb-a1e2-48cd-8d6d-7d91cb3b9153) |
+|:--:| 
+| *You should get the answer.* |
