@@ -1,95 +1,129 @@
-# Crack the Hash Level 2 
+# Crack the Hash Level 2
+
 I will be skipping the first four tasks as they are already guided. 
 
 # Tasks
 
 ### Task 5 (Custom Wordlist Generation):
+
 At this point you should have wordlistctl set up. We will need it for the rest of the challenge. 
 
 Unfortunately [Mentalist](https://github.com/sc0tfree/Mentalist) is a bit outdated, which comes with some issues if using a newer version of python. There's two ways to solve this. I'm going to be explaining the 'proper' way using pyenv. Otherwise you can modify the code manually as discussed in this [issue](https://github.com/sc0tfree/Mentalist/issues/41) or look for a working fork.
 
-#### pyenv method 
+#### pyenv method
+
 This is going to be a quick overview of how to use [pyenv](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv), its installation and use may differ slightly depending on which shell you're using. I recommend following the full instructions on the github page.
 
 * Automatic installer 
-```
-curl -fsSL https://pyenv.run | bash
-```
+  
+  ```
+  curl -fsSL https://pyenv.run | bash
+  ```
+
 * Set up shell enviroment for Pyenv (follow instructions on github for your corresponding shell, most likely bash)
 
 * Create a directory for Mentalist enviroment
-```
-mkdir Mentalist-env
-```
+  
+  ```
+  mkdir Mentalist-env
+  ```
+
 * Clone Mentalist
-```
-git clone https://github.com/sc0tfree/Mentalist
-```
+  
+  ```
+  git clone https://github.com/sc0tfree/Mentalist
+  ```
+
 * Move into the Mentalist directory
-```
-cd Mentalist
-```
+  
+  ```
+  cd Mentalist
+  ```
+
 * Install correct python version using pyenv
-```
-pyenv install 3.11.8
-```
+  
+  ```
+  pyenv install 3.11.8
+  ```
+
 * Create local python enviroment using pyenv
-```
-pyenv local 3.11.8
-```
+  
+  ```
+  pyenv local 3.11.8
+  ```
+
 * Test python version
-```
-python --version
-```
+  
+  ```
+  python --version
+  ```
+
 * You should see this as a response
-```
-Python 3.11.8
-```
-If you move into a different directory and check version again, it should be your global version, not 3.11.8. 
+  
+  ```
+  Python 3.11.8
+  ```
+  
+  If you move into a different directory and check version again, it should be your global version, not 3.11.8. 
+
 * Install Mentalist (make sure you're in the right directory if you changed to test pyenv)
-```
-pip install .
-```
-If you did everything correctly it should say 'Successfuly installed Mentalist-1.0'.
+  
+  ```
+  pip install .
+  ```
+  
+  If you did everything correctly it should say 'Successfuly installed Mentalist-1.0'.
+
 * Run Mentalist (I used sudo because I was getting permission errors when trying to save the wordlist)
-```
-sudo Mentalist
-```
-You should see the Mentalist GUI open. While that was slightly annoying, it's important to understand how to run things that rely on deprecated versions of python.
+  
+  ```
+  sudo Mentalist
+  ```
+  
+  You should see the Mentalist GUI open. While that was slightly annoying, it's important to understand how to run things that rely on deprecated versions of python.
 
 Now we can move on to actually crafting the wordlist.
 
-#### Crafting dog wordlist 
+#### Crafting dog wordlist
+
 * First fetch (haha) the dog wordlist using wordlistctl. I did this by navigating to where I had the script installed and running:
-```
-sudo ./wordlistctl.py fetch dogs
-```
-This will download a few folders in your /usr/share/wordlists directory. We are looking for the /usr/share/wordlists/misc/dogs.txt.gz
+  
+  ```
+  sudo ./wordlistctl.py fetch dogs
+  ```
+  
+  This will download a few folders in your /usr/share/wordlists directory. We are looking for the /usr/share/wordlists/misc/dogs.txt.gz
 * Unzip it
-```
-gunzip dogs.txt.gz
-```
+  
+  ```
+  gunzip dogs.txt.gz
+  ```
 * Now open Mentalist
 * Remove the preloaded English dictionary wordlist, add the dog wordlist.
 * Press the plus in the top right, select Case, then click the plus next to Case. Select `Toggle Nth...` and then enter 2.
 * Press the plus in the top right, select Substitution, then click the plus next to Substitution. Select `Replace All Instances...` and then select `S -> $`
 
 | ![mentalist_wordlist](https://github.com/user-attachments/assets/659fb317-4531-40f3-832f-634a397f5a3f) |
-|:--:| 
-| *It should look like this.* |
-
+|:------------------------------------------------------------------------------------------------------:|
+| *It should look like this.*                                                                            |
 
 * Click Process, select Full Wordlist, give the new wordlist a name and save it.
 
 ##### Using the dog wordlist with JohnTheRipper
+
 * Make a file with the given hash
-```
-echo "ed91365105bba79fdab20c376d83d752" > md5.txt
-```
+  
+  ```
+  echo "ed91365105bba79fdab20c376d83d752" > md5.txt
+  ```
 * Run JohnTheRipper with the crafted wordlist
-```
-john --format=raw-MD5 --wordlist=/usr/share/wordlists/misc/mentalist_dog_list.txt md5.txt
-```
-| ![dog_answer](https://github.com/user-attachments/assets/613654cb-a1e2-48cd-8d6d-7d91cb3b9153) |
-|:--:| 
-| *You should get the answer.* |
+  
+  ```
+  john --format=raw-MD5 --wordlist=/usr/share/wordlists/misc/mentalist_dog_list.txt md5.txt
+  ```
+  
+  | ![dog_answer](https://github.com/user-attachments/assets/613654cb-a1e2-48cd-8d6d-7d91cb3b9153) |
+  |:----------------------------------------------------------------------------------------------:|
+  | *You should get the answer.*                                                                   |
+
+test
