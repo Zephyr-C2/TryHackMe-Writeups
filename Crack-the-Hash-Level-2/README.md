@@ -100,14 +100,14 @@ Now we can move on to actually crafting the wordlist.
   ```
 * Now open Mentalist
 * Remove the preloaded English dictionary wordlist, add the dog wordlist.
-* Press the plus in the top right, select Case, then click the plus next to Case. Select `Toggle Nth...` and then enter 2.
+* Press the plus in the top right, select Case, then click the plus next to Case. Select `Toggle Nth...` and then enter 2
 * Press the plus in the top right, select Substitution, then click the plus next to Substitution. Select `Replace All Instances...` and then select `S -> $`
 
 | ![mentalist_wordlist](https://github.com/user-attachments/assets/659fb317-4531-40f3-832f-634a397f5a3f) |
 |:------------------------------------------------------------------------------------------------------:|
 | *It should look like this.*                                                                            |
 
-* Click Process, select Full Wordlist, give the new wordlist a name and save it.
+* Click Process, select Full Wordlist, give the new wordlist a name and save it
 
 ##### Using the dog wordlist with JohnTheRipper
 
@@ -126,4 +126,87 @@ Now we can move on to actually crafting the wordlist.
   |:----------------------------------------------------------------------------------------------:|
   | *You should get the answer.*                                                                   |
 
-test
+#### Using ceWL
+* Install [ceWL](https://github.com/digininja/CeWL) by following the instructions on the github page
+* Go to the directory you want to work in
+* Run the given command
+	```
+	cewl -d 2 -w $(pwd)/example.txt https://example.org
+	```
+* Test if it worked by running cat on example.txt
+	```
+	cat example.txt
+	```
+	| ![](../../Medium_Writeups/Crack_the_Hash_2/cewl_answer.png) |
+	| :-: |
+	| *Something went wrong during this part for me, the answer is information* |
+I'm not sure if I did something wrong, or if it's broken, but the list is not in order for me. I brute forced the answer.
+
+#### Using TTPassgen 
+
+* TTPassgen can be easily installed using pip:
+	```
+	pip install TTPassgen
+	```
+	In my case I actually needed to use pipx, your mileage may vary.
+
+* Create the first wordlist containing all 4 digit PIN code values.
+	```
+	ttpassgen --rule '[?d]{4:4:*}' pin.txt
+	```
+
+* Create the second list containing all lowercase char combinations of 1-3 length.
+	```
+	ttpassgen --rule '[?l]{1:3:*}' abc.txt
+	```
+
+* Combine the two wordlists.
+	```
+	ttpassgen --dictlist 'pin.txt,abc.txt' --rule '$0[-]{1}$1' combination.txt
+	```
+
+* Now let's crack the given hash using John and the crafted wordlist.
+	```
+	echo e5b47b7e8df2597077e703c76ee86aee > MD5.txt
+	```
+	```
+	john --format=raw-MD5 --wordlist=/path/to/wordlist MD5.txt
+	```
+	| ![](../../Medium_Writeups/Crack_the_Hash_2/ttpass_answer.png) |
+	| :-: |
+	| *Answer output looks like this*|
+
+### TASK 6 (It's time to crack hashes)
+* Launch the machine and connect via VPN or Attack Box.
+
+* Go to the machine's IP and select 'advices' in the top right
+	| ![](../../Medium_Writeups/Crack_the_Hash_2/advice_1.png) |
+	| :-: | 
+	| *The first challenge* | 
+The user says their name is John, and they usually use their son's name. The hacker recommends using a border mutation at the beginning, end, or both.
+
+* Let's grab a male name wordlist from wordlistctl. I'm running the wordli 
+	```
+	./wordlistctl.py search male
+	```
+	![](../../Medium_Writeups/Crack_the_Hash_2/male_wordlist.png)
+* Let's try option number 2. The option -d will automatically decompress the archive.
+	```
+	sudo ./wordlistctl fetch -d Malename
+	```
+
+* Now open mentalist.
+* Add the wordlist we just downloaded like we did with the dog one earlier.
+
+
+* Check the hash type with haiti (explained earlier in the room, skipped in this walkthrough)
+	```
+	haiti b16f211a8ad7f97778e5006c7cecdf31
+	```
+	![](../../Medium_Writeups/Crack_the_Hash_2/hash1_type.png)
+
+* We see that it's an MD5.
+ 	```
+ 	echo b16f211a8ad7f97778e5006c7cecdf31 > MD5.txt
+ 	```
+ 
