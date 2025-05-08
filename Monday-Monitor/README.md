@@ -8,7 +8,7 @@ Led by the tech-savvy Senior Security Engineer John Sterling, Swiftspend's lates
 
 The tests were run on Apr 29, 2024, between 12:00:00 and 20:00:00. As you dive into the logs, you'll look for any suspicious process shenanigans or weird network connections, you name it! Your mission? Unravel the mysteries within the logs and dish out some epic insights to fine-tune Swiftspend's defences.
 
-* Once logged in, navigate to the **Security** events module and use the saved query `Monday_Monitor` to access the logs.
+Once logged in, navigate to the **Security Events** module and use the saved query `Monday_Monitor` to access the logs.
 
 ### Questions
 
@@ -20,19 +20,21 @@ Heads up, I did **not** censor the answers in this walkthrough.
 
 After navigating to **Wazuh -> Modules -> Security Events** go to the top left under dashboard, click the floppy disk icon, and select `Monday_Monitor`
 
-![saved_queries.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/saved_queries.png)
+![saved_queries](https://github.com/user-attachments/assets/93cbdfbd-35e0-4621-9304-7d2da4b71d6a)
 
 Near the top right side, select the Date area, and then select **Absolute**. We need to select the time period `Apr 29, 2024, between 12:00:00 and 20:00:00`
 
 Make sure to press update after. Your dashboard should look like this now.
 
-![time_period.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/time_period.png)
+![time_period](https://github.com/user-attachments/assets/e15a8069-0529-4deb-b0d6-881a981cfbe4)
 
 Now we know a suspicious file was downloaded, the question is how do we sort through the events to find it. Let's try sorting by HTTP. In the dashboard query search type "HTTP".
 
-![http.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/http.png)We find three events, let's examine them. I'm going to start with the earliest event chronologically. 
+![http](https://github.com/user-attachments/assets/84553b4a-a11e-4996-8038-d99ee8ae5f09)
 
-<img src="file:///home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/first_alert.png" title="" alt="first_alert.png" width="720">
+We find three events, let's examine them. I'm going to start with the earliest event chronologically. 
+
+![first_alert](https://github.com/user-attachments/assets/7afb4e10-17c3-49e4-977f-99e64ffeae88)
 
 We see the command `\"powershell.exe\" & {$url = 'http://localhost/SwiftSpend_Financial_Expenses.xlsm' Invoke-WebRequest -Uri $url -OutFile $env:TEMP\\PhishingAttachment.xlsm}` has been issued on the agent.
 
@@ -74,11 +76,11 @@ We have found the answer to the first question.
 
 We can start by searching for `schtasks.exe` which is a native windows tool used to perform tasks at a specified time/interval. You should see four alerts.
 
-![schtasks.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/schtasks.png)
+![schtasks](https://github.com/user-attachments/assets/63bba209-bdcc-492a-b6ca-33a3468f5858)
 
 If we look at the earliest alert we can find the command we're looking for. 
 
-![schtasks_command.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/schtasks_command.png)
+![schtasks_command](https://github.com/user-attachments/assets/d1b14f0c-ba44-4e72-81e8-257cd85a77e2)
 
 `\"cmd.exe\" /c \"reg add HKCU\\SOFTWARE\\ATOMIC-T1053.005 /v test /t REG_SZ /d cGluZyB3d3cueW91YXJldnVsbmVyYWJsZS50aG0= /f & schtasks.exe /Create /F /TN \"ATOMIC-T1053.005\" /TR \"cmd /c start /min \\\"\\\" powershell.exe -Command IEX([System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String((Get-ItemProperty -Path HKCU:\\\\SOFTWARE\\\\ATOMIC-T1053.005).test)))\" /sc daily /st 12:34\"`
 
@@ -124,11 +126,11 @@ Let's break this command down:
 
 * `/st 12:34` Start time is 12:34 PM
 
-Wow that was a lot! But now we can see that this command is definetly malicious. It adds a base64 encoded payload to the registry, and creates a scheduled task to run the decoded payload daily in a minimized window. The decoded payload pings "www[.]youarevulnerable[.]thm".
+Wow that was a lot! But now we can see that this command is definetly malicious. It adds a base64 encoded payload to the registry, and creates a scheduled task to run the decoded payload daily in a minimized window. The decoded payload pings "www[.]youarevulnerable[.]thm" at 12:34 PM.
 
 The answer to question number two is: 
 
-``"cmd.exe" /c "reg add HKCU\SOFTWARE\ATOMIC-T1053.005 /v test /t REG_SZ /d cGluZyB3d3cueW91YXJldnVsbmVyYWJsZS50aG0= /f & schtasks.exe /Create /F /TN "ATOMIC-T1053.005" /TR "cmd /c start /min \"\" powershell.exe -Command IEX([System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String((Get-ItemProperty -Path HKCU:\\SOFTWARE\\ATOMIC-T1053.005).test)))" /sc daily /st 12:34"`
+`"cmd.exe" /c "reg add HKCU\SOFTWARE\ATOMIC-T1053.005 /v test /t REG_SZ /d cGluZyB3d3cueW91YXJldnVsbmVyYWJsZS50aG0= /f & schtasks.exe /Create /F /TN "ATOMIC-T1053.005" /TR "cmd /c start /min \"\" powershell.exe -Command IEX([System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String((Get-ItemProperty -Path HKCU:\\SOFTWARE\\ATOMIC-T1053.005).test)))" /sc daily /st 12:34"`
 
 I got a little carried away, we've actually found the answer to the next two questions as well.
 
@@ -152,7 +154,7 @@ First we search which Windows Event ID is associated with a password change, and
 
 By searching for `data.win.system.eventID:4738` we can filter for alerts with this event ID.
 
-![event_ID.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/event_ID.png)
+![event_ID](https://github.com/user-attachments/assets/a284fa1f-7be5-42a8-a4ea-16b6166026af)
 
 The alerts themselves don't tell us what we're looking for (the password), but by looking for events around the same time that these two events occurred, we might be able to find some more information. I chose to sort by:
 
@@ -160,7 +162,7 @@ The alerts themselves don't tell us what we're looking for (the password), but b
 
 To make these easier, click **Events** and then on the left side under **Available fields** look for `data.win.eventdata.commandLine` and press the plus sign to add it to **Selected fields**.
 
-![fields.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/fields.png)
+![fields](https://github.com/user-attachments/assets/d83eeb4a-ed4a-4a3a-8af0-1db860326424)
 
 We see a few suspicious things here. First we see the command `\"C:\\Windows\\system32\\net.exe\" user guest /active:yes` being run which invokes net.exe (LOLBIN) to enable the guest account. 
 
@@ -182,9 +184,7 @@ Let's follow this attack chain further by increasing our time scope to:
 
 **Apr 29, 2024 @ 14:14:00:000 -> Apr 29, 2024 @ 14:20:00:000**
 
-![memotech.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/memotech.png)
-
-
+![memotech](https://github.com/user-attachments/assets/7d8f223b-2036-4bfd-90c3-409d1bde5912)
 
 We see typical discovery commands being run like `HOSTNAME.exe` and `whoami.exe` plus the use of `\"C:\\Windows\\system32\\rundll32.exe\" keymgr,KRShowKeyMgr` which lets you view stored credentials.
 
@@ -216,7 +216,7 @@ I expanded my timeline to:
 
 **Apr 29, 2024 @ 14:14:00:000 -> Apr 29, 2024 @ 15:00:00:000**
 
-![exfil.png](/home/z/Documents/TryHackMe-Writeups/Monday-Monitor/assets/exfil.png)
+![exfil](https://github.com/user-attachments/assets/b180828f-6ef1-48a5-b99b-91414d763528)
 
 We see various malicious commands, mostly discovery for folders or documents that might have data worth exfiltrating. We then see the use of `notepad.exe` with relation to opening Atomic Read Team YAML test definitions. These files provide:
 
