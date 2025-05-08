@@ -22,7 +22,9 @@ After navigating to **Wazuh -> Modules -> Security Events** go to the top left u
 
 ![saved_queries](https://github.com/user-attachments/assets/93cbdfbd-35e0-4621-9304-7d2da4b71d6a)
 
-Near the top right side, select the Date area, and then select **Absolute**. We need to select the time period `Apr 29, 2024, between 12:00:00 and 20:00:00`
+Near the top right side, select the Date area, and then select **Absolute**. We need to select this time period:
+
+**Apr 29, 2024, between 12:00:000 and 20:00:000**
 
 Make sure to press update after. Your dashboard should look like this now.
 
