@@ -2,3 +2,13 @@
 A repository for my TryHackMe walkthroughs/writeups. I censor the answers to encourage others to follow along, and I try to be as detailed as possible.
 
 <img src="https://tryhackme-badges.s3.amazonaws.com/ZephyrEx.png" />
+
+![web_fundamentals](https://github.com/user-attachments/assets/5c59f9bc-2c22-4b6e-9293-fada40f00a51)
+
+![cyber_101](https://github.com/user-attachments/assets/cd817151-da30-40c6-a55a-5a406ca91064)
+
+![hackfinity](https://github.com/user-attachments/assets/61b932a4-2b9f-4790-994e-16b84eefbc3b)
+
+![pre_security](https://github.com/user-attachments/assets/67e451cf-c4dc-472e-9b71-421550e6fe26)
+
+![intro_to_cyber](https://github.com/user-attachments/assets/8e482947-2a73-4bea-b0fb-cda0cb38b332)
