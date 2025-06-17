@@ -3,6 +3,8 @@ A repository for my TryHackMe walkthroughs/writeups. I censor the answers to enc
 
 <img src="https://tryhackme-badges.s3.amazonaws.com/ZephyrEx.png" />
 
+![jr_pentest](https://github.com/user-attachments/assets/a9b47a10-cfbb-4d7a-a1d7-a9abd8d9449c)
+
 ![web_fundamentals](https://github.com/user-attachments/assets/5c59f9bc-2c22-4b6e-9293-fada40f00a51)
 
 ![cyber_101](https://github.com/user-attachments/assets/cd817151-da30-40c6-a55a-5a406ca91064)
