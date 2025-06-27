@@ -4,7 +4,7 @@
 
 On my journey to pass the PT1, I am going through every recommended learning room. I have just completed the Jr Pentester Pathway, and am now looking to do some more challenge rooms. I still have to learn how to attack Active Directory, so I'm skipping those challenges for now. This room will focus on web application testing.
 
-**Update after finishing:** This challenge was tough. Probably one of the hardest rooms I've done so far. I was hoping I could figure out more on my own, but ended up needing to look at some other walkthroughs to help me along the way. Still, I learned a ton from this room, such as mass assignment vulnerability, exploiting rabbitmq, intercepting HTTP requests with Caido, and just generally better ways to improve my hacking methodology. I'd like to give a big shoutout to [jaxafed,]([TryHackMe: Rabbit Store | jaxafed](https://jaxafed.github.io/posts/tryhackme-rabbit_store/)) their walkthrough helped me immensely, and is one of the most well formatted walkthroughs I've come across.
+**Update after finishing:** This challenge was tough. Probably one of the hardest rooms I've done so far. I was hoping I could figure out more on my own, but ended up needing to look at some other walkthroughs to help me along the way. Still, I learned a ton from this room, such as mass assignment vulnerability, exploiting rabbitmq, intercepting HTTP requests with Caido, and just generally better ways to improve my hacking methodology. I'd like to give a big shoutout to [jaxafed,](https://jaxafed.github.io/posts/tryhackme-rabbit_store/) their walkthrough helped me immensely, and is one of the most well formatted walkthroughs I've come across.
 
 ## Hosts File
 
@@ -25,7 +25,7 @@ First, let's start with an aggressive nmap scan.
 nmap -A -p- cloudsite.thm
 ```
 
-![nmap](/home/z/Documents/Rabbit_Store/rabbit_assets/nmap.png)
+![nmap](rabbit_assets/nmap.png)
 
 Interesting we found:
 
@@ -41,31 +41,31 @@ We'll keep this in mind for later, let's check out the website.
 
 Navigate to `http://cloudsite.thm`:
 
-![cloudsite](/home/z/Documents/Rabbit_Store/rabbit_assets/cloudsite.png)
+![cloudsite](rabbit_assets/cloudsite.png)
 
 Looking in the **About Us** section we find some names that might be useful later.
 
-![about_us](/home/z/Documents/Rabbit_Store/rabbit_assets/about_us.png)
+![about_us](rabbit_assets/about_us.png)
 
 Some other potentially interesting information at the bottom of the page (emails, phone numbers, and stack tags).
 
-![about_us_2](/home/z/Documents/Rabbit_Store/rabbit_assets/about_us_2.png)
+![about_us_2](rabbit_assets/about_us_2.png)
 
 Some other emails in the **Contact Us** section.
 
-![contact_us](/home/z/Documents/Rabbit_Store/rabbit_assets/contact_us.png)
+![contact_us](rabbit_assets/contact_us.png)
 
 The login page is semi-interesting, as its hosted on a different subdomain.
 
-![login](/home/z/Documents/Rabbit_Store/rabbit_assets/login_page.png)
+![login](rabbit_assets/login_page.png)
 
 I tested creating a user account and was met with this message.
 
-![user_test](/home/z/Documents/Rabbit_Store/rabbit_assets/user_test.png)
+![user_test](rabbit_assets/user_test.png)
 
 A quick check with Wappalyzer shows this tech stack.
 
-![wappalyzer](/home/z/Documents/Rabbit_Store/rabbit_assets/wappalyzer.png)
+![wappalyzer](rabbit_assets/wappalyzer.png)
 
 Now let's do some more enumeration.
 
@@ -77,7 +77,7 @@ gobuster dir -w /usr/share/wordlists/SecLists/Discovery/Web-Content/raft-medium-
 
 I filtered out 403 and 404 responses to make the screenshot more clean.
 
-![gobuster_1](/home/z/Documents/Rabbit_Store/rabbit_assets/gobuster_1.png)
+![gobuster_1](rabbit_assets/gobuster_1.png)
 
 The /assets and /javascript could be interesting.
 
@@ -87,7 +87,7 @@ Now we run Gobuster on the subdomain.
 gobuster dir -w /usr/share/wordlists/SecLists/Discovery/Web-Content/raft-medium-words.txt -u storage.cloudsite.thm -b 403,404
 ```
 
-![gobuster_2](/home/z/Documents/Rabbit_Store/rabbit_assets/gobuster_2.png)
+![gobuster_2](rabbit_assets/gobuster_2.png)
 
 Some more interesting directories.
 
@@ -97,7 +97,7 @@ Quick check for other subdomains.
 gobuster dns -d cloudsite.thm -w /usr/share/wordlists/SecLists/Discovery/DNS/subdomains-top1million-5000.txt
 ```
 
-![gobuster_3](/home/z/Documents/Rabbit_Store/rabbit_assets/gobuster_3.png)
+![gobuster_3](rabbit_assets/gobuster_3.png)
 
 Nothing.
 
@@ -107,13 +107,13 @@ That was a lot of information, now we need to figure out how to use it.
 
 I decided to start by capturing a login request with Caido:
 
-![caido_1](/home/z/Documents/Rabbit_Store/rabbit_assets/caido_1.png)
+![caido_1](rabbit_assets/caido_1.png)
 
 The JWT is quite interesting. I took the JWT and used jwt.io to decode it. I messed around with the payload for a while and tried to test if I could access the /dashboard/active page by foraging a token that had `"alg": "none"` but this didn't work. It checks for a secret key, and bypassing that wasn't possible. I figured this was a bit of a rabbit hole so I chose to move on for now.
 
 I then tried some basic SQLi and brute forcing on the login page, when I realized I was probably overthinking this. I went back to look at my nmap scan from earlier, and took a closer look at the Erlang Port Mapper Daemon. And thats when I saw it. 
 
-![rabbit](/home/z/Documents/Rabbit_Store/rabbit_assets/rabbit.png)
+![rabbit](rabbit_assets/rabbit.png)
 
 nodes:
 
@@ -123,9 +123,9 @@ The title of the room... rabbit store. Not sure how I missed this earlier, but t
 
 So back to trying to get an authenticated account. After some more research I realized that it was a lot more simple than trying to forge the JWT. 
 
-![mass_assignment](/home/z/Documents/Rabbit_Store/rabbit_assets/subscribed.png)
+![mass_assignment](rabbit_assets/subscribed.png)
 
-Turns out we need to exploit a [mass assignment]([Mass assignment vulnerability - Wikipedia](https://en.wikipedia.org/wiki/Mass_assignment_vulnerability)) vulnerability. Essentially, we add the subscription field to the registration request, and set it to active. Now we login to the new account we created, and we have an active subscription.
+Turns out we need to exploit a [mass assignment](https://en.wikipedia.org/wiki/Mass_assignment_vulnerability) vulnerability. Essentially, we add the subscription field to the registration request, and set it to active. Now we login to the new account we created, and we have an active subscription.
 
 ```http
 POST /api/register HTTP/1.1
@@ -150,19 +150,19 @@ Priority: u=0
 
 Now we have an account with an active subscription, allowing us to view the authorized portal.
 
-![file_upload](/home/z/Documents/rabbit_assets/file_upload.png)
+![file_upload](rabbit_assets/file_upload.png)
 
 Upon logging in to our active account, we're presented with this page. Time to upload a reverse shell, or so I hope. 
 
 First I checked the page source for any clues on how the upload function processed files. Nothing too interesting.
 
-![extensions_removed](/home/z/Documents/Rabbit_Store/rabbit_assets/extensions_removed.png)
+![extensions_removed](rabbit_assets/extensions_removed.png)
 
 File extensions are removed for security reasons. Hmm. This might be harder than expected. 
 
 But we also have an alternate method for uploading files.
 
-![url_upload](/home/z/Documents/Rabbit_Store/rabbit_assets/upload_from_url.png)
+![url_upload](rabbit_assets/upload_from_url.png)
 
 I created a simple file named test.txt with the word test in it. Then I spun up a python web server.
 
@@ -170,7 +170,7 @@ I created a simple file named test.txt with the word test in it. Then I spun up 
 python3 -m http.server
 ```
 
-![test1](/home/z/Documents/Rabbit_Store/rabbit_assets/test1.png)
+![test1](rabbit_assets/test1.png)
 
 Successful upload. Now let's try again and capture the request in Caido this time. I accidentally forgot to queue the request on "test2.txt" so that's why it goes from "test.txt" to "test3.txt".
 
@@ -198,7 +198,7 @@ Some further enumeration on /api shows:
 gobuster dir -w /usr/share/wordlists/SecLists/Discovery/Web-Content/raft-medium-words.txt -u storage.cloudsite.thm/api/
 ```
 
-![api](/home/z/Documents/Rabbit_Store/rabbit_assets/api_fuzz.png)
+![api](rabbit_assets/api_fuzz.png)
 
 If we try a GET request on the /api/docs endpoint we receive an access denied.
 
@@ -220,11 +220,11 @@ Connection: Keep-Alive
 
 But in the `X-Powered-By` header we see `Express`. What is Express? Express is a web application framework for Node.js, which is used to build web servers and APIs. Knowing this we can attempt to access the endpoint directly instead of dealing with the Apache server. We can do this by accessing `http://127.0.0.1:3000/api/docs` (Port 3000 is the default port for Express).
 
-![upload_docs](/home/z/Documents/Rabbit_Store/rabbit_assets/upload_docs.png)
+![upload_docs](rabbit_assets/upload_docs.png)
 
 Now we retrieve the file we uploaded.
 
-![docs](/home/z/Documents/Rabbit_Store/rabbit_assets/docs.png)
+![docs](rabbit_assets/docs.png)
 
 We get some juicy information.
 
@@ -286,7 +286,7 @@ Content-length: 15
 }
 ```
 
-![chatbot](/home/z/Documents/Rabbit_Store/rabbit_assets/chatbot.png)
+![chatbot](rabbit_assets/chatbot.png)
 
 ```json
 {
@@ -318,7 +318,7 @@ Content-length: 20
 
 We get a response this time.
 
-![sorry](/home/z/Documents/Rabbit_Store/rabbit_assets/sorry.png)
+![sorry](rabbit_assets/sorry.png)
 
 We can see that our username is reflected in the response. This could indicate SSTI. Server-Side Template Injection is a vulnerability that occurs when user input is unsafely inserted into a server-side template and gets interpreted as code. This allows an attacker to inject and execute arbitrary code on the server, often leading to remote code execution (RCE).
 
@@ -328,7 +328,7 @@ We can test for this using an SSTI polyglot payload. A polyglot SSTI payload is 
 {"username":"${{<%[%'\"}}%\\."}
 ```
 
-![polyglot](/home/z/Documents/Rabbit_Store/rabbit_assets/polyglot.png)
+![polyglot](rabbit_assets/polyglot.png)
 
 This causes an error on the Jinja2 templating engine. We can now attempt to exploit this SSTI to gain RCE, using the following payload:
 
@@ -361,7 +361,7 @@ Content-length: 20
 
 ```
 
-![revshell](/home/z/Documents/Rabbit_Store/rabbit_assets/revshell.png)
+![revshell](rabbit_assets/revshell.png)
 
 And we have revshell. Since we know we're looking for "user.txt" we can use the find command.
 
@@ -385,7 +385,7 @@ After a quick search I saw that the erlang cookie is typically stored in `/var/l
 
 And sure enough `cat /var/lib/rabbitmq/.erlang.cookie` provided the necessary cookie.
 
-![cookie](/home/z/Documents/Rabbit_Store/rabbit_assets/cookie.png)
+![cookie](rabbit_assets/cookie.png)
 
 I had a little issue with the output lacking a trailing newline, so I used a little workaround to display it nicely. 
 
@@ -409,7 +409,7 @@ Now we use the rabbitmqctl (used to manage rabbitmq nodes)  to enumerate the Rab
 sudo rabbitmqctl --erlang-cookie 'OrBZItrpGHLcMZbP' --node rabbit@forge status
 ```
 
-![mqctl](/home/z/Documents/Rabbit_Store/rabbit_assets/mqctl1.png)
+![mqctl](rabbit_assets/mqctl1.png)
 
 ```bash
 Status of node rabbit@forge ...
@@ -459,7 +459,7 @@ Further enumeration:
 sudo rabbitmqctl --erlang-cookie 'OrBZItrpGHLcMZbP' --node rabbit@forge list_users
 ```
 
-![rabbit_users](/home/z/Documents/Rabbit_Store/rabbit_assets/rabbit_users.png)
+![rabbit_users](rabbit_assets/rabbit_users.png)
 
 ```bash
 root@ip-10-10-99-111:~/temp# sudo rabbitmqctl --erlang-cookie 'OrBZItrpGHLcMZbP' --node rabbit@forge list_users
@@ -478,7 +478,7 @@ We can export this hash by doing:
 sudo rabbitmqctl --erlang-cookie 'OrBZItrpGHLcMZbP' --node rabbit@forge export_definitions /tmp/definitions.json
 ```
 
-<img src="file:///home/z/Documents/Rabbit_Store/rabbit_assets/hash_export.png" title="" alt="hash_export" width="680">
+<img src="rabbit_assets/hash_export.png" title="" alt="hash_export" width="680">
 
 ```bash
 root@ip-10-10-99-111:~/temp# sudo rabbitmqctl --erlang-cookie 'OrBZItrpGHLcMZbP' --node rabbit@forge export_definitions /tmp/definitions.json
@@ -539,6 +539,6 @@ root@forge:/home/azrael/chatbotServer# find / -name "root.txt" 2>/dev/null
 /root/root.txt
 ```
 
-And that's the room complete. Thanks for reading if you got this far. Again, highly recommend looking at [jaxafed's]([TryHackMe: Rabbit Store | jaxafed](https://jaxafed.github.io/posts/tryhackme-rabbit_store/)) walkthrough, it's extremely well put together and I could not have completed this without it.
+And that's the room complete. Thanks for reading if you got this far. Again, highly recommend looking at [jaxafed's](https://jaxafed.github.io/posts/tryhackme-rabbit_store/) walkthrough, it's extremely well put together and I could not have completed this without it.
 
 
