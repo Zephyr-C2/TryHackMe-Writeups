@@ -1,7 +1,9 @@
 # TryHackMe-Writeups
 A repository for my TryHackMe walkthroughs/writeups. I censor the answers to encourage others to follow along, and I try to be as detailed as possible.
 
-<img src="https://tryhackme-badges.s3.amazonaws.com/ZephyrEx.png" />
+![TryHackMe](https://tryhackme-badges.s3.amazonaws.com/ZephyrEx.png?v=1)
+
+![jr_pentest](https://github.com/user-attachments/assets/a9b47a10-cfbb-4d7a-a1d7-a9abd8d9449c)
 
 ![web_fundamentals](https://github.com/user-attachments/assets/5c59f9bc-2c22-4b6e-9293-fada40f00a51)
 
