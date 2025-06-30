@@ -428,7 +428,7 @@ Analysis
 
 Cursory research shows Werkzeug/3.1.3 is NOT vulnerable.
 
-![[Pasted image 20250627120450.png]]
+![[Images/Pasted image 20250627120450.png|Pasted image 20250627120450.png]]
 Web server 
 
 Page Source
@@ -505,7 +505,7 @@ Page Source
 
 Caido time, could just use curl but I don't like to 
 
-![[Pasted image 20250627122419.png]]
+![[Images/Pasted image 20250627122419.png|Pasted image 20250627122419.png]]
 
 Curl
 ```bash
@@ -617,7 +617,7 @@ No progress with this. Let's try something else
 ## Alternate Web Server (8080)
 `http://10.10.201.61:8080`
 
-![[Pasted image 20250627130701.png]]
+![[Images/Pasted image 20250627130701.png|Pasted image 20250627130701.png]]
 
 I tried a bunch of default creds. Nothing worked. Checked page source, nothing interesting.
 
@@ -815,22 +815,22 @@ Finished
 ===============================================================
 ```
 
-![[Pasted image 20250627132522.png]]
+![[Images/Pasted image 20250627132522.png|Pasted image 20250627132522.png]]
 
 Never seen this before, but it looks like it could be related to gate control.
 
 Can't edit without login BUT looking at function 2 
 
-![[Pasted image 20250627134239.png]]
+![[Images/Pasted image 20250627134239.png|Pasted image 20250627134239.png]]
 
 We see a comment `// Output to badge checker UI`
 
 Now remember the Gobuster output `/ui`
 
-![[Pasted image 20250627134332.png]]
+![[Images/Pasted image 20250627134332.png|Pasted image 20250627134332.png]]
 
 Interesting! I toggle these off. Now let's check the gate again.
 
-![[Pasted image 20250627134435.png]]
+![[Images/Pasted image 20250627134435.png|Pasted image 20250627134435.png]]
 
 Let's go, first challenge complete.

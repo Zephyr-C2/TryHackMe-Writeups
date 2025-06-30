@@ -26,7 +26,7 @@ SSH has password based authentication, potential vector.
 - If misconfigured, it can leak valid usernames.
     
 
-![[Pasted image 20250627185352.png]]
+![[Images/Pasted image 20250627185352.png|Pasted image 20250627185352.png]]
 
 I tested:
 
@@ -39,7 +39,7 @@ magnus
 Magnus
 fabiano
 
-![[Pasted image 20250627185704.png]]
+![[Images/Pasted image 20250627185704.png|Pasted image 20250627185704.png]]
 Got a hit with fabio, decoded the base64 and got a password for SSH. Knew password based SSH would be notable.
 
 Logged in to SSH and retrieved `user.txt` flag.

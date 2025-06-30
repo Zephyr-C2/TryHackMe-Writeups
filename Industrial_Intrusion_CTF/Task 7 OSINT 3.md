@@ -225,4 +225,4 @@ gpg --keyserver keyserver.ubuntu.com --recv-keys A4F0FEB084A311E5
 
 ```
 
-![[Pasted image 20250627161012.png]]
+![[Images/Pasted image 20250627161012.png|Pasted image 20250627161012.png]]

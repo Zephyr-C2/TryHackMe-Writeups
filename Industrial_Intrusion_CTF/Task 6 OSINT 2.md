@@ -1,10 +1,10 @@
-![[Pasted image 20250627180218.png]]
+![[Images/Pasted image 20250627180218.png|Pasted image 20250627180218.png]]
 
 Search for virelia-water
 
 Search records on crt.sh 
 
-![[Pasted image 20250627180636.png]]
+![[Images/Pasted image 20250627180636.png|Pasted image 20250627180636.png]]
 
 Found stage0.virelia-water.it.com
 

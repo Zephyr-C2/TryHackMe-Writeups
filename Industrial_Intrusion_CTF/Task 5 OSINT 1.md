@@ -1,9 +1,9 @@
 https://virelia-water.it.com/
 
-![[Pasted image 20250627141017.png]]
+![[Images/Pasted image 20250627141017.png|Pasted image 20250627141017.png]]
 
 
-![[Pasted image 20250627141053.png]]404, tried wayback machine, there were captures but not anything useful.
+![[Images/Pasted image 20250627141053.png|Pasted image 20250627141053.png]]404, tried wayback machine, there were captures but not anything useful.
 
 `https://virelia-water.it.com/mail-archives/ot-alerts/2025-06.html`
 

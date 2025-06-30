@@ -12,7 +12,7 @@ PORT     STATE SERVICE
 8080/tcp open  http-proxy
 ```
 
-![[Pasted image 20250627151903.png]]
+![[Images/Pasted image 20250627151903.png|Pasted image 20250627151903.png]]
 
 Default credentials worked
 username: admin
