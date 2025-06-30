@@ -66,13 +66,13 @@ Progress: 20910 / 63089 (33.14%)
 
 `/assets`
 
-![[Images/Pasted image 20250627194609.png|Pasted image 20250627194609.png]]
+![Pasted image 20250627194609.png](Images/Pasted%20image%2020250627194609.png)
 
 Nothing useful.
 
 `/keys`
 
-![[Images/Pasted image 20250627194651.png|Pasted image 20250627194651.png]]
+![Pasted image 20250627194651.png](Images/Pasted%20image%2020250627194651.png)
 
 We check `key_09`
 

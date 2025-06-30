@@ -1,4 +1,4 @@
-![[Images/Pasted image 20250627150858.png|Pasted image 20250627150858.png]]
+![Pasted image 20250627150858.png](Images/Pasted%20image%2020250627150858.png)
 
 ```bash
 Starting Nmap 7.97 ( https://nmap.org ) at 2025-06-27 15:06 -0500  
