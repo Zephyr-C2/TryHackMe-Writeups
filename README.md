@@ -9,6 +9,8 @@ A repository for my TryHackMe walkthroughs/writeups. I censor the answers to enc
 
 ![cyber_101](https://github.com/user-attachments/assets/cd817151-da30-40c6-a55a-5a406ca91064)
 
+![sal1](https://github.com/user-attachments/assets/b1089c1e-9364-4ee3-8cf1-2105090c2011)
+
 ![hackfinity](https://github.com/user-attachments/assets/61b932a4-2b9f-4790-994e-16b84eefbc3b)
 
 ![pre_security](https://github.com/user-attachments/assets/67e451cf-c4dc-472e-9b71-421550e6fe26)
